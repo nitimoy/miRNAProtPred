@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MiRNAProtPred Validator</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script>
+        // Function to validate the sequence field
+        function validateSequence() {
+            var sequenceInput = document.getElementById('sequence');
+            var sequenceValue = sequenceInput.value;
+            
+            // Use a regular expression to check if there are any digits (integers) in the input
+            var containsInteger = /\d/.test(sequenceValue);
+            
+            if (containsInteger) {
+                // If it contains integers, show an error message
+                alert('Error: Sequence should not contain integers.');
+                sequenceInput.focus(); // Put focus back on the sequence field
+                return false; // Prevent form submission
+            }
+            
+            return true; // Allow form submission if no integers are found
+        }
+    </script>
+</head>
+<body>
+    {% extends 'base.html' %}
+   
+
+    {% block content %}
+    <div class="container">
+        <h1 class="mt-4">miRNA-Validator</h1>
+        <h6 class="mt-4">•	For in silico validation of predicted human miRNA, user can use miRNA-Validator tool. </h6>
+        <h6 class="mt-4">•	If users have details of downregulated miRNA during the specific pathogenic infection (Such as HIV, influenzas, etc.), they can use this tool. Users can provide the list of downregulated miRNAs as input along with the 3’UTR sequence of mRNA or protein/DNA/mRNA sequence as input. This will help to identify and in silico validation of more potential human miRNA that can be further used as potential therapeutics.</h6>
+        <h6 class="mt-4">•	To obtain the results, the user must submit -</h6>
+        <h6 class="mt-6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o	Sequence of 3’UTR of mRNA or DNA/RNA/protein sequence of surface protein/pathogenesis-associated protein of pathogen. </h6>
+        <h6 class="mt-6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o	List of human miRNAs that are reported as downregulated during pathogenic disease.</h6>
+        <br>
+        <form method="POST" onsubmit="return validateSequence();">
+            <div class="mb-3">
+                <label for="sequence" class="form-label">Enter Sequence (DNA, RNA, or Protein):</label>
+                <textarea name="sequence" class="form-control" rows="4" id="sequence" required></textarea>
+            </div>            
+            <div class="mb-3">
+                <label for="miRNA_ids" class="form-label">Enter Human miRNA IDs (comma-separated):</label>
+                <input type="text" name="miRNA_ids" class="form-control" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        
+        <!-- Display results using Bootstrap components -->
+        {% if results %}
+            <h2 class="mt-4">Results:</h2>
+            <ul class="list-group mt-3">
+                {% for result in results %}
+                    <li class="list-group-item {% if result.seed_match %}list-group-item-success{% else %}list-group-item-danger{% endif %}">
+                        miRNA ID: {{ result.id }}
+                        - - - - - - - - - - - - - 
+                        {% if result.seed_match %}
+                            <span class="alert alert-success"><b>Positive</b></span>
+                        {% else %}
+                            <span class="alert alert-danger"><b>Negative</b></span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    <br>
+    <br>
+    {% endblock %}
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>miRNA-SeqFinder</title>
+    <!-- Remove the custom CSS link -->
+    <!-- Remove the script references if not needed -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script>
+        // Function to validate the sequence field
+        function validateSequence() {
+            var sequenceInput = document.getElementById('sequence');
+            var sequenceValue = sequenceInput.value;
+            
+            // Use a regular expression to check if there are any digits (integers) in the input
+            var containsInteger = /\d/.test(sequenceValue);
+            
+            if (containsInteger) {
+                // If it contains integers, show an error message
+                alert('Error: Sequence should not contain integers.');
+                sequenceInput.focus(); // Put focus back on the sequence field
+                return false; // Prevent form submission
+            }
+            
+            return true; // Allow form submission if no integers are found
+        }
+    </script>
+</head>
+<body>
+    {% extends 'base.html' %}
+    {% block content %}
+    <div class="container">
+        <h1 class="mt-4">miRNA-SeqFinder</h1>
+        <h6 class="mt-4">•	If the users have no data of 3’UTR of mRNA of pathogen. They can provide DNA, RNA, or protein sequences of target protein of pathogen for prediction of potential human miRNA.</h6>
+        <h6 class="mt-4">•	We have observed that in most of the cases, human miRNA that can interact with 3’UTR of pathogen mRNA or inhibit the protein/gene expression of pathogen, have also shown presence of seed sequence of miRNA in the cDNA sequence of respective protein. </h6>
+        <h6 class="mt-4">•	The predicted human miRNA can be further used for computational biology, bioinformatics, or wet lab experiments and analysis as well as a therapeutic agent against that specific pathogen.</h6>
+        <h6 class="mt-4">•	If we upregulate the predicted human miRNA or use miRNA mimic against pathogens, it will significantly diminish their growth. Ultimately, it may help to control the pathogenic disease.</h6>
+        <h6 class="mt-4">•	Before clinical trials, the predicted human miRNA must be experimentally validated. </h6>
+
+        <form action="/sequence_finder" method="post" class="mt-4" onsubmit="return validateSequence();">
+            <div class="form-group">
+                <label for="job_id">Job Id (Optional):</label>
+                <input type="text" class="form-control" name="job_id" id="job_id">
+            </div>
+            <div class="form-group">
+                <label for="sequence">Enter Sequence (DNA, RNA, or Protein):</label>
+                <textarea class="form-control" name="sequence" id="sequence" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        
+        <!-- Display Matching Rows Table -->
+        {% if no_results_message %}
+        <div class="alert alert-warning mt-3" role="alert">
+            {{ no_results_message }}
+        </div>
+        {% endif %}
+        
+        {% if display_rows %}
+        <h2 class="mt-4">Matching Rows: {% if job_id %} {{ job_id }}{% endif %}</h2>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Human miRNA ID</th>
+                    <th>Accession Number</th>
+                    <th>Sequence 5' to 3'</th>
+                    <th>Seed</th>
+		    <th>Position</th>
+                    <!-- Add other column headers here -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in display_rows %}
+                <tr>
+                    <td>{{ row.Description }}</td>
+                    <td>{{ row.Human_miRNA_ID }}</td>
+                    <td>{{ row.Accession_ID }}</td>
+                    <td>{{ row.Sequence }}</td>
+                    <td>{{ row.Seed }}</td>
+		    <td>{{ row.Position }}</td>
+                    <!-- Add other column data here -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+            {% if excel_path %}
+                <a href="{{ excel_path }}" download class="btn btn-success">Download Complete Data</a>
+            {% endif %}
+        {% endif %}
+    </div>
+    <br>
+    <br>
+    {% endblock %}
+</body>
+</html>
