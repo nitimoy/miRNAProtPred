@@ -13,9 +13,9 @@ app = Flask(__name__)
 # Database credentials
 db_params = {
     'host': 'localhost',
-    'database': 'postgres',
-    'user': 'postgres',
-    'password': 'Sandeep@1a'
+    'database': 'db_name',
+    'user': 'db_user',
+    'password': 'db_password'
 }
 
 # Establish a connection
