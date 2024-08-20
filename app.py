@@ -136,7 +136,7 @@ def search_miRNA_id_in_db(miRNA_id):
     return result
 
 def get_geolocation(ip_address):
-    token = os.getenv('GEOLOCATION_API_TOKEN', '39102577b08cef')
+    token = os.getenv('GEOLOCATION_API_TOKEN', 'GEOLOCATION_API_TOKEN')
     url = f'https://ipinfo.io/{ip_address}/json?token={token}'
     response = requests.get(url)
     data = response.json()
