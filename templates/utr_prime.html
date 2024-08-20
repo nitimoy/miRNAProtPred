@@ -1,95 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>MiRNAProtPred</title>
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script>
-        // Function to validate the sequence field
-        function validateSequence() {
-            var sequenceInput = document.getElementById('sequence');
-            var sequenceValue = sequenceInput.value;
-            
-            // Use a regular expression to check if there are any digits (integers) in the input
-            var containsInteger = /\d/.test(sequenceValue);
-            
-            if (containsInteger) {
-                // If it contains integers, show an error message
-                alert('Error: Sequence should not contain integers.');
-                sequenceInput.focus(); // Put focus back on the sequence field
-                return false; // Prevent form submission
-            }
-            
-            return true; // Allow form submission if no integers are found
-        }
-    </script>
-</head>
-<body>
-    {% extends 'base.html' %}
+{% extends 'base.html' %}
 
-    {% block content %}
+{% block title %}3'UTR miRNA-Pred - miRNAProtPred{% endblock %}
 
-    <div class="container">
-        <h1 class="mt-4">3’UTRmiRNA-Pred </h1>
-        <h6 class="mt-4">•	If users have a 3’UTR sequence of mRNA of pathogen, they can use this tool for prediction of potential human miRNA that can inhibit the expression of respective protein or gene. Users can provide the 3’UTR sequence of mRNA of respective protein as input.</h6>
-        <h6 class="mt-4">•	It enables users to predict the binding position of the provided sequence at complementary site of miRNAs. </h6>
-        <h6 class="mt-4">•	After gathering this information, one may use it for further computational biology, bioinformatics, or wet lab experiments and analysis. </h6>
-        <h6 class="mt-4">•	The predicted miRNA or their miRNA mimic can be used as therapeutics against pathogens.</h6>
-        <form action="/utr_prime" method="post" class="mt-4" onsubmit="return validateSequence();">
-            <div class="form-group">
-                <label for="job_id">Job Id (Optional):</label>
-                <input type="text" class="form-control" name="job_id" id="job_id">
-            </div>
-            <div class="form-group">
-                <label for="sequence">Enter Sequence (3'UTR of mRNA Sequence):</label>
-                <textarea class="form-control" name="sequence" id="sequence" rows="4" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
-        <!-- Display Matching Rows Table -->
-        {% if no_results_message %}
-        <div class="alert alert-warning mt-3" role="alert">
-            {{ no_results_message }}
+{% block hero_content %}
+<h1 class="text-white font-weight-bold">3'UTR miRNA-Pred</h1>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h6 class="mt-4">• If users have a 3’UTR sequence of mRNA of pathogen, they can use this tool for prediction of potential human miRNA that can inhibit the expression of respective protein or gene. Users can provide the 3’UTR sequence of mRNA of respective protein as input.</h6>
+    <h6 class="mt-4">• It enables users to predict the binding position of the provided sequence at complementary site of miRNAs. </h6>
+    <h6 class="mt-4">• After gathering this information, one may use it for further computational biology, bioinformatics, or wet lab experiments and analysis. </h6>
+    <h6 class="mt-4">• The predicted miRNA or their miRNA mimic can be used as therapeutics against pathogens.</h6>
+    <form action="/utr_prime" method="post" class="mt-4" onsubmit="return showWaitingModal();">
+        <div class="form-group">
+            <label for="job_id">Job Id (Optional):</label>
+            <input type="text" class="form-control" name="job_id" id="job_id">
         </div>
-        {% endif %}
-        
-        {% if display_rows %}
-        <h2 class="mt-4">Matching Rows: {% if job_id %} {{ job_id }}{% endif %}</h2>
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Human miRNA ID</th>
-                    <th>Accession Number</th>
-                    <th>Sequence 5' to 3'</th>
-                    <th>Seed</th>
-                    <th>Position</th>
-                    <!-- Add other column headers here -->
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in display_rows %}
-                <tr>
-                    <td>{{ row.Description }}</td>
-                    <td>{{ row.Human_miRNA_ID }}</td>
-                    <td>{{ row.Accession_ID }}</td>
-                    <td>{{ row.Sequence }}</td>
-                    <td>{{ row.Seed }}</td>
-                    <td>{{ row.Position }}</td>
-                    <!-- Add other column data here -->
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-            {% if excel_path %}
-                <a href="{{ excel_path }}" download class="btn btn-success">Download Complete Data</a>
-            {% endif %}
-        {% endif %}
+        <div class="form-group">
+            <label for="sequence">Enter Sequence (3'UTR of mRNA Sequence):</label>
+            <textarea class="form-control" name="sequence" id="sequence" rows="4" required></textarea>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Search</button>
+    </form>
+    <!-- Display Matching Rows Table -->
+    {% if no_results_message %}
+    <div class="alert alert-warning mt-3" role="alert">
+        {{ no_results_message }}
     </div>
-    <br>
-    <br>    
-    {% endblock %}
-</body>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% endif %}
+
+    {% if display_rows %}
+    <h2 class="mt-4">Matching Rows: {% if job_id %} {{ job_id }}{% endif %}</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Human miRNA ID</th>
+                <th>Accession Number</th>
+                <th>Sequence 5' to 3'</th>
+                <th>Seed</th>
+                <th>Position</th>
+                <!-- Add other column headers here -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in display_rows %}
+            <tr>
+                <td>{{ row.Description }}</td>
+                <td>{{ row.HumanmiRNAID }}</td>
+                <td>{{ row.Accession }}</td>
+                <td>{{ row.Sequence}}</td>
+                <td>{{ row.Seed }}</td>
+                <td>{{ row.Position }}</td>
+                <!-- Add other column data here -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        {% if excel_path %}
+            <a href="{{ excel_path }}" download class="btn btn-success">Download Complete Data</a>
+        {% endif %}
+    {% endif %}
+</div>
+<br><br>
+{% endblock %}

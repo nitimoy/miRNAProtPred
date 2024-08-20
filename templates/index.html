@@ -1,36 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>MiRNAProtPred</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-</head>
-<body>
-    {% extends 'base.html' %}
-   
+{% extends 'base.html' %}
 
-    {% block content %}
-    <p style="text-align: center;"><strong><span style="font-size: 24px;">miRNAProtPred: A web tool for prediction of human miRNA associated with pathogens.</span></strong></p>
-    <p><br></p>
-    <p><span style="font-size: 20px;"><u><strong><span style='font-family: "Comic Sans MS", sans-serif;'>Why miRNA-ProtPred?</span></strong></u></span></p>
-    <p><span style="font-size: 18px;">miRNA-ProtPred predicts the human miRNAs that have potential to inhibit the expression of gene/protein of different pathogens.&nbsp;</span></p>
-    <p><span style="font-size: 18px;">Most techniques predict miRNA against human proteins, however miRNA-ProtPred is the first online server to predict human miRNA against 3&rsquo;UTR, protein, RNA, or DNA of human pathogens.</span></p>
-    <table style="width: 100%;">
-        <tbody>
-            <tr>
-                <td style="width: 100.0000%;">
-                    <div style="text-align: center;"><img src="https://s11.gifyu.com/images/S43TY.gif" alt="tool_img"></div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <p><span style="font-size: 20px;"><u><strong><span style="font-family: Comic Sans MS, sans-serif;">Why miRNA?</span></strong></u></span></p>
-    <p><span style="font-size: 18px;">&bull;</span><span style="white-space: pre; font-size: 18px;">&nbsp; &nbsp;&nbsp;</span><span style="font-size: 18px;">It plays an important role in gene regulation and protein expression.</span></p>
-    <p><span style="font-size: 18px;">&bull;</span><span style="white-space: pre; font-size: 18px;">&nbsp; &nbsp;&nbsp;</span><span style="font-size: 18px;">During pathogenic infection, the miRNA of the human host can bind with 3&rsquo; UTR of mRNA of pathogen and can inhibit the gene/protein expression and ultimately helps in disease control.</span></p>
-    <p><span style="font-size: 18px;">&bull;</span><span style="white-space: pre; font-size: 18px;">&nbsp; &nbsp;&nbsp;</span><span style="font-size: 18px;">The FDA has not yet approved any miRNA-based therapeutics (as of 2023). However, some miRNA mimics are under different phages of clinical trials.</span></p>
-    {% endblock %}
-</body>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</html>
+{% block title %}Home - miRNAProtPred{% endblock %}
+
+{% block hero_content %}
+<h1 class="text-white font-weight-bold">miRNAProtPred</h1>
+<h3 class="text-white font-weight-bold">A Web Tool for Prediction of Human miRNA Associated with Pathogens.</h3>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Why miRNA-ProtPred?</h2>
+    <p>miRNA-ProtPred predicts the human miRNAs that have potential to inhibit the expression of gene/protein of different pathogens.</p>
+    <p>Most techniques predict miRNA against human proteins; however, miRNA-ProtPred is the first online server to predict human miRNA against 3’UTR, protein, RNA, or DNA of human pathogens.</p>
+    <div class="text-center my-4">
+        <img src="https://s11.gifyu.com/images/S43TY.gif" alt="tool_img" class="img-fluid">
+    </div>
+    <h3 class="mt-4"><u>Why miRNA?</u></h3>
+    <ul class="list-unstyled">
+        <li class="mb-2"><strong>&bull;</strong> It plays an important role in gene regulation and protein expression.</li>
+        <li class="mb-2"><strong>&bull;</strong> During pathogenic infection, the miRNA of the human host can bind with 3’ UTR of mRNA of pathogen and can inhibit the gene/protein expression and ultimately helps in disease control.</li>
+        <li class="mb-2"><strong>&bull;</strong> The FDA has not yet approved any miRNA-based therapeutics (as of 2023). However, some miRNA mimics are under different phases of clinical trials.</li>
+    </ul>
+</div>
+{% endblock %}
